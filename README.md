@@ -2,6 +2,7 @@ instrumental.js
 ============
 
 Making a sampler or mod tracker app?  Instrumental can get you started by provided a framework for loading and playing samples.
+Developed for use in (Tunesmith)[https://github.com/peterkhayes/Tunesmith "Tunesmith"].
 
 How to use
 ==========
@@ -10,7 +11,7 @@ Initialization
 -------
 
     var player = new Instrumental({
-      // The webAudio audiocontext object to be used.
+      // The webAudio audiocontext object to be used. 
       // If omitted, defaults to a new window.AudioContext or window.webkitAudioContext
       context: <audioContext>,
       
