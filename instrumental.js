@@ -106,9 +106,9 @@ var Instrumental = function(config) {
 
   // Load initial instruments.
   if (config.instruments) {
-    for (var i in instruments) {
-      if (i.notes) {
-        loadInstrument(i, notes);
+    for (var name in config.instruments) {
+      if (config.instruments[name]) {
+        this.loadInstrument(name, config.instruments[name]);
       }
     }
   }
