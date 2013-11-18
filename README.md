@@ -2,7 +2,7 @@ instrumental.js
 ============
 
 Making a sampler or mod tracker app?  Instrumental can get you started by provided a framework for loading and playing samples.
-Developed for use in (Tunesmith)[https://github.com/peterkhayes/Tunesmith "Tunesmith"].
+Developed for use in [Tunesmith](https://github.com/peterkhayes/Tunesmith "Tunesmith").
 
 How to use
 ==========
