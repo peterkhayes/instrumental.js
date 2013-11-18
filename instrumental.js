@@ -2,7 +2,10 @@
 
 var Instrumental = function(config) {
 
-  var audioContext = config.audioContext || window.AudioContext || window.webkitAudioContext,
+  if (!config.audioContext) window.AudioContext = window.AudioContext || window.webkitAudioContext; // Webkit shim.
+
+  var context = config.audioContext || new window.AudioContext(),
+      destination = config.destination || context.destination
       path = config.path || "",
       filetype = config.filetype || "mp3",
       instruments = {};
@@ -29,14 +32,14 @@ var Instrumental = function(config) {
     request.responseType = "arraybuffer";
 
     request.onload = function() {
-      this.context.decodeAudioData(request.response,
+      context.decodeAudioData(request.response,
         function (buffer) {
           if (!buffer) {
             console.log("error decoding file data for #{url}");
             return;
           }
           console.log("Downloaded #{url}");
-          this.instruments[name][note] = buffer;
+          instruments[name][note] = buffer;
         },
         function (error) {
           console.error('decodeAudioData error', error);
@@ -83,12 +86,12 @@ var Instrumental = function(config) {
     var best_int = parseInt(best, 10);
 
     // Make a new source node to play our note.
-    var source = this.context.createBufferSource();
+    var source = context.createBufferSource();
     source.buffer = instrument[best_int];
     // Pitch shift and play!
     source.playbackRate.value = Math.pow(2,(note - best_int)/12);
     source.gain.value = gain;
-    source.connect(this.context.destination);
+    source.connect(destination);
     source.noteOn(0);
     // End the note after the length;
     setTimeout(function() { fadeNote(source); }, length);
