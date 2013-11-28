@@ -5,10 +5,14 @@ var Instrumental = function(config) {
   if (!config.audioContext) window.AudioContext = window.AudioContext || window.webkitAudioContext; // Webkit shim.
 
   var context = config.audioContext || new window.AudioContext(),
-      destination = config.destination || context.destination
+      destination = config.destination || context.destination,
       path = config.path || "",
       filetype = config.filetype || "mp3",
       instruments = {};
+
+  if (path.length && path[path.length - 1] !== "/") {
+    path = path + "/";
+  }
 
   // Load or update notes associated with a single instrument.
   // Name is the instrument's name.
@@ -28,6 +32,7 @@ var Instrumental = function(config) {
   this.loadBuffer = function(name, note) {
     var request = new XMLHttpRequest(),
         url = path + name + "/" + note + "." + filetype;
+    console.log("loading " + url);
     request.open("GET", url, true);
     request.responseType = "arraybuffer";
 
@@ -35,10 +40,10 @@ var Instrumental = function(config) {
       context.decodeAudioData(request.response,
         function (buffer) {
           if (!buffer) {
-            console.log("error decoding file data for #{url}");
+            console.log("error decoding file data for", url);
             return;
           }
-          console.log("Downloaded #{url}");
+          console.log("Downloaded", url);
           instruments[name][note] = buffer;
         },
         function (error) {
@@ -55,7 +60,7 @@ var Instrumental = function(config) {
   };
 
   // Plays a note, pitch-shifting the closet available sample to match.
-  this.play = function(name, note, gain, length) {
+  this.play = function(name, note, length, gain) {
 
     gain = gain || 1;
 
